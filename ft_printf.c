@@ -19,7 +19,18 @@ static int	check_input(const char *input, void *arg)
 	int	i;
 
 	i = 0;
-	if (*inpu)
+	if (*input == 'c')
+		i += ft_putchar((int)arg);
+	else if (*input == 's')
+		i += ft_putstr((char *)arg);
+	else if (*input == 'd' || *input == 'i')
+		i += ft_putnbr((int)arg);
+	else if (*input == 'u')
+		i += ft_putunsigned_nbr((unsigned int)arg);
+	else if (*input == 'x')
+		i += ft_puthex((unsigned int)arg, 87);
+	else if (*input == 'X')
+		i += ft_puthex((unsigned int)arg, 55);
 }
 
 int	ft_printf(const char *format, ...)
