@@ -11,32 +11,38 @@
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include <cstdarg>
+#include <vadefs.h>
 
-int	ft_printf(const char *format, ...)
+static int	check_input(const char *input, void *arg)
 {
 	int	i;
 
 	i = 0;
+	if (*inpu)
+}
+
+int	ft_printf(const char *format, ...)
+{
+	va_list			args;
+	unsigned int	i;
+
+	i = 0;
+	va_start(args, format);
 	while (format[i])
 	{
-		if (format[i] == "%")
+		if (format[i] == '%')
 		{
 			i++;
-			if (format[i] == "c")
-				return (ft_putchar(va_arg(format, int)));
-			else if (format[i] == 's')
-				return (ft_putstr(va_arg(format, char *)));
-			else if (format[i] == 'p')
-				return (ft_putstr(va_arg(format, void *)));
-			else if (format[i] == 'd' || 'i')
-				return (ft_putnbr(va_arg(format, int)));
-			else if (format[i] == 'u')
-				return (ft_putunsigned_nbr(va_arg(format, unsigned int)));
-			else if (format[i] == 'x' || 'X')
-				return (ft_puthex(va_arg(format, int)));
+			if (ft_strchr("cspdiuxX", *format))
+				i += check_input(format, va_arg(args, void *));
 			else if (format[i] == '%')
-				return (ft_putchar("%"));
+				i += ft_putchar('%');
 		}
+		else
+			i = i + ft_putchar('%');
+		i++;
 	}
-	return (0);
+	va_end(args);
+	return (i);
 }
