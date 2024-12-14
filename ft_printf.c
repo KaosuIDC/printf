@@ -6,54 +6,58 @@
 /*   By: sudelory <sudelory@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 19:50:51 by sudelory          #+#    #+#             */
-/*   Updated: 2024/12/05 16:21:50 by sudelory         ###   ########.fr       */
+/*   Updated: 2024/12/14 04:08:41 by sudelory         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-#include <cstdarg>
-#include <vadefs.h>
+#include "ft_printf.h"
+#include <stdarg.h>
 
-static int	check_input(const char *input, void *arg)
+static int	check_input(const char *input, va_list args)
 {
 	int	i;
 
 	i = 0;
 	if (*input == 'c')
-		i += ft_putchar((int)arg);
+		i += ft_putchar(va_arg(args, int));
 	else if (*input == 's')
-		i += ft_putstr((char *)arg);
+		i += ft_putstr((va_arg(args, char *)));
+	else if (*input == 'p')
+		i += ft_putptr(va_arg(args, void *));
 	else if (*input == 'd' || *input == 'i')
-		i += ft_putnbr((int)arg);
+		i += ft_putnbr(va_arg(args, int));
 	else if (*input == 'u')
-		i += ft_putunsigned_nbr((unsigned int)arg);
+		i += ft_putunsigned_nbr(va_arg(args, unsigned int));
 	else if (*input == 'x')
-		i += ft_puthex((unsigned int)arg, 87);
+		i += ft_puthex(va_arg(args, unsigned int), 87);
 	else if (*input == 'X')
-		i += ft_puthex((unsigned int)arg, 55);
+		i += ft_puthex(va_arg(args, unsigned int), 55);
+	return (i);
 }
 
 int	ft_printf(const char *format, ...)
 {
 	va_list			args;
 	unsigned int	i;
+	int				count;
 
-	i = 0;
 	va_start(args, format);
+	i = 0;
+	count = 0;
 	while (format[i])
 	{
 		if (format[i] == '%')
 		{
 			i++;
-			if (ft_strchr("cspdiuxX", *format))
-				i += check_input(format, va_arg(args, void *));
+			if (ft_strchr("cspdiuxX", format[i]))
+				count += check_input(&format[i], args);
 			else if (format[i] == '%')
-				i += ft_putchar('%');
+				count += ft_putchar('%');
 		}
 		else
-			i = i + ft_putchar('%');
+			count += ft_putchar(format[i]);
 		i++;
 	}
 	va_end(args);
-	return (i);
+	return (count);
 }

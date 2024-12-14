@@ -1,3 +1,7 @@
+SRCS=	ft_printf.c\
+		ft_putint.c\
+		ft_putsorc.c\
+		ft_strchr.c
 cc = cc
 CFLAGS = -Wall -Werror -Wextra
 NAME = libftprintf.a
