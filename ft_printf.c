@@ -6,12 +6,11 @@
 /*   By: sudelory <sudelory@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 19:50:51 by sudelory          #+#    #+#             */
-/*   Updated: 2024/12/14 04:08:41 by sudelory         ###   ########.fr       */
+/*   Updated: 2024/12/15 02:43:20 by sudelory         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdarg.h>
 
 static int	check_input(const char *input, va_list args)
 {
@@ -19,20 +18,22 @@ static int	check_input(const char *input, va_list args)
 
 	i = 0;
 	if (*input == 'c')
-		i += ft_putchar(va_arg(args, int));
+		return (ft_putchar(va_arg(args, int)));
 	else if (*input == 's')
-		i += ft_putstr((va_arg(args, char *)));
+		return (ft_putstr((va_arg(args, char *))));
 	else if (*input == 'p')
-		i += ft_putptr(va_arg(args, void *));
+		return (ft_putptr(va_arg(args, void *)));
 	else if (*input == 'd' || *input == 'i')
-		i += ft_putnbr(va_arg(args, int));
+		return (ft_putnbr(va_arg(args, int)));
 	else if (*input == 'u')
-		i += ft_putunsigned_nbr(va_arg(args, unsigned int));
+		return (ft_putunsigned_nbr(va_arg(args, unsigned int)));
 	else if (*input == 'x')
-		i += ft_puthex(va_arg(args, unsigned int), 87);
+		return (ft_puthex(va_arg(args, unsigned int), 87));
 	else if (*input == 'X')
-		i += ft_puthex(va_arg(args, unsigned int), 55);
-	return (i);
+		return (ft_puthex(va_arg(args, unsigned int), 55));
+	else if (*input == '%')
+		return (ft_putchar('%'));
+	return (-1);
 }
 
 int	ft_printf(const char *format, ...)
@@ -40,24 +41,24 @@ int	ft_printf(const char *format, ...)
 	va_list			args;
 	unsigned int	i;
 	int				count;
+	int				check;
 
 	va_start(args, format);
 	i = 0;
 	count = 0;
 	while (format[i])
 	{
+		check = 0;
 		if (format[i] == '%')
 		{
-			i++;
-			if (ft_strchr("cspdiuxX", format[i]))
-				count += check_input(&format[i], args);
-			else if (format[i] == '%')
-				count += ft_putchar('%');
+			check = check_input(&format[++i], args);
+			if (check < 0)
+				return (-1);
+			count += check;
 		}
 		else
 			count += ft_putchar(format[i]);
 		i++;
 	}
-	va_end(args);
-	return (count);
+	return (va_end(args), count);
 }

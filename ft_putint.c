@@ -6,13 +6,11 @@
 /*   By: sudelory <sudelory@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 00:58:07 by sudelory          #+#    #+#             */
-/*   Updated: 2024/12/14 04:05:50 by sudelory         ###   ########.fr       */
+/*   Updated: 2024/12/15 02:51:08 by sudelory         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <limits.h>
-#include <unistd.h>
 
 int	ft_putnbr(int nb)
 {
